@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/*
+ * 디자인 토큰 — 색상은 여기서만 바꾸면 사이트 전체에 반영돼요.
+ * bg-bg / bg-surface / text-ink / text-muted / text-accent 처럼 사용해요.
+ */
+@theme {
+  --color-bg: #f0eee6;
+  --color-surface: #ffffff;
+  --color-ink: #141414;
+  --color-muted: #6b6b6b;
+  --color-accent: #c2456e;
+  --color-placeholder: #d7d5ce;
+
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+
+  --tracking-label: 0.22em;
+
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    background-color: var(--color-bg);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    word-break: keep-all;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+  }
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 9%, transparent);
+}
