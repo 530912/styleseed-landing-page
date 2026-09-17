@@ -20,7 +20,7 @@ npm run lint
 | 랜딩 카피 · 통계 · 가격 · 영상 URL | `content/landing.ts` (`**강조**` 부분은 로즈핑크) |
 | 로그인/회원가입 준비 중 문구 | `content/auth.ts` |
 | 네비게이션 · 문의 이메일 · 메타 설명 | `lib/site.ts` |
-| 색상 · 폰트 토큰 | `app/globals.css` 의 `@theme` |
+| 색상 · 폰트 토큰 | `app/globals.css` 의 `@theme` (영문 디스플레이 서체 Archivo는 `app/layout.tsx`) |
 | 앱 화면 · 옷 · Core 이미지 | `public/images/...` (경로는 `content/landing.ts` 참고, 파일이 없으면 회색 플레이스홀더) |
 | OG 이미지 | `app/opengraph-image.tsx` 삭제 후 `app/opengraph-image.png`(1200×630) 추가 |
 
@@ -33,8 +33,8 @@ app/
 components/
   landing/       섹션별 컴포넌트 (Hero, ClosetParadox, Insight, ...)
   layout/        SiteHeader, SiteFooter, HeaderAuthActions(로그인 상태 전환 자리)
-  motion/        SmoothScroll, CursorSparkles, Reveal, CountUp, Parallax
-  ui/            Section, SectionHeading, Button, PhoneFrame, MaybeImage, ComingSoon
+  motion/        SmoothScroll, CursorSparkles, Reveal, CountUp, Parallax, ScrollRail, ScrollProgressLine
+  ui/            Section, SectionHeading, Button, PhoneFrame, MaybeImage, GarmentPlaceholder, ComingSoon
 content/         카피 데이터
 lib/             사이트 설정, 유틸, 미디어쿼리 훅
 ```

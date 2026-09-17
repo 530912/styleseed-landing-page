@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 import { Reveal } from "@/components/motion/Reveal";
@@ -12,13 +11,28 @@ import { cn } from "@/lib/cn";
 
 const cycles: BillingCycle[] = ["monthly", "yearly"];
 
-function CheckIcon({ className }: { className?: string }) {
+function FeatureList({ items, tone }: { items: string[]; tone: "light" | "dark" }) {
   return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={cn("mt-1 size-4 shrink-0", className)}>
-      <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <ul className="flex flex-col gap-3">
+      {items.map((feature) => (
+        <li key={feature} className="flex gap-3 text-base leading-normal">
+          <span
+            aria-hidden="true"
+            className={cn(
+              "mt-2 size-2 shrink-0 rounded-full",
+              tone === "light" ? "bg-ink/30" : "bg-accent",
+            )}
+          />
+          {feature}
+        </li>
+      ))}
+    </ul>
   );
 }
+
+const planName = "font-wide text-xl font-extrabold tracking-[-0.01em] font-stretch-expanded";
+const priceText =
+  "font-wide text-[46px] leading-[1.05] font-extrabold tracking-[-0.05em] font-stretch-semi-expanded md:text-[72px] lg:text-[clamp(64px,6.4vw,92px)]";
 
 export function Pricing() {
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
@@ -27,14 +41,22 @@ export function Pricing() {
 
   return (
     <Section id="pricing" labelledBy="pricing-title">
-      <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <SectionHeading id="pricing-title" {...pricing.heading} />
 
+        {/* 결제 주기 스위치: 검은 알약이 선택한 쪽으로 미끄러져요 */}
         <div
           role="group"
           aria-label="PLUS 결제 주기"
-          className="inline-flex w-fit shrink-0 rounded-full bg-surface p-1"
+          className="relative grid w-fit shrink-0 grid-cols-2 rounded-full bg-surface p-1.5"
         >
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute inset-y-1.5 left-1.5 w-[calc(50%-6px)] rounded-full bg-ink transition-transform duration-400 ease-[cubic-bezier(0.2,0.7,0.1,1)] motion-reduce:transition-none",
+              cycle === "yearly" && "translate-x-full",
+            )}
+          />
           {cycles.map((option) => (
             <button
               key={option}
@@ -42,8 +64,8 @@ export function Pricing() {
               aria-pressed={cycle === option}
               onClick={() => setCycle(option)}
               className={cn(
-                "h-10 rounded-full px-5 text-sm font-semibold transition-colors",
-                cycle === option ? "bg-ink text-surface" : "text-muted hover:text-ink",
+                "relative h-11 min-w-[92px] rounded-full px-5 text-sm font-bold transition-colors duration-300",
+                cycle === option ? "text-surface" : "text-muted hover:text-ink",
               )}
             >
               {pricing.cycleLabels[option]}
@@ -52,72 +74,64 @@ export function Pricing() {
         </div>
       </div>
 
-      <div className="mt-14 grid gap-4 md:mt-20 md:grid-cols-2 md:gap-5">
-        <Reveal as="article" className="flex flex-col rounded-[28px] bg-surface p-7 md:p-10">
-          <h3 className="text-sm font-bold tracking-label uppercase">{free.name}</h3>
-          <p className="mt-6 flex h-16 items-end">
-            <span className="text-5xl font-bold tracking-[-0.04em] md:text-6xl">{free.price}</span>
-          </p>
-          <ul className="mt-10 flex flex-col gap-3 border-t border-ink/10 pt-8">
-            {free.features.map((feature) => (
-              <li key={feature} className="flex gap-3 text-base">
-                <CheckIcon className="text-muted" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-12 flex flex-col gap-4 md:mt-auto md:pt-12">
+      <div className="mt-12 grid gap-4 md:mt-16 lg:grid-cols-12 lg:gap-6">
+        <Reveal as="article" className="flex flex-col rounded-card bg-surface p-6 md:p-10 lg:col-span-5 lg:p-12">
+          <h3 className={planName}>{free.name}</h3>
+          <p className={cn("mt-6", priceText)}>{free.price}</p>
+          <div className="mt-8 border-t border-ink/10 pt-8">
+            <FeatureList items={free.features} tone="light" />
+          </div>
+          <div className="mt-10 lg:mt-auto lg:pt-12">
             <ButtonLink href={free.cta.href} variant="outline" size="lg" className="w-full">
               {free.cta.label}
             </ButtonLink>
-            {/* PLUS 카드의 안내 문구와 버튼 높이를 맞추기 위한 자리 */}
-            <p aria-hidden="true" className="invisible hidden text-xs md:block">
-              &nbsp;
-            </p>
           </div>
         </Reveal>
 
         <Reveal
           as="article"
           delay={0.12}
-          className="flex flex-col rounded-[28px] bg-ink p-7 text-surface md:p-10"
+          className="flex flex-col rounded-card bg-ink p-6 text-surface md:p-10 lg:col-span-7 lg:p-12"
         >
-          <h3 className="flex items-center gap-2 text-sm font-bold tracking-label uppercase">
+          <h3 className={planName}>
             {plus.name}
-            <span aria-hidden="true" className="text-accent">
+            <span aria-hidden="true" className="ml-1.5 text-accent">
               ✦
             </span>
           </h3>
-          <p className="mt-6 flex h-16 items-end gap-2" aria-live="polite">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={cycle}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.25 }}
-                className="flex items-end gap-2"
+
+          {/* 가격 오도미터: 월간 ↔ 연간이 위아래로 굴러요 */}
+          <p className="mt-6">
+            <span className="sr-only" aria-live="polite">
+              {plusPrice.amount} / {plusPrice.unit}
+            </span>
+            <span aria-hidden="true" className={cn("block h-[1.05em] overflow-hidden", priceText)}>
+              <span
+                className={cn(
+                  "flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.2,0.7,0.1,1)] motion-reduce:transition-none",
+                  cycle === "yearly" && "-translate-y-1/2",
+                )}
               >
-                <span className="text-5xl font-bold tracking-[-0.04em] md:text-6xl">
-                  {plusPrice.amount}
-                </span>
-                <span className="pb-1.5 text-base text-surface/60">/ {plusPrice.unit}</span>
-              </motion.span>
-            </AnimatePresence>
+                {cycles.map((option) => (
+                  <span key={option} className="flex h-[1.05em] items-baseline whitespace-nowrap">
+                    {plus.prices[option].amount}
+                    <span className="ml-3 font-sans text-base font-medium tracking-normal text-surface/60 md:text-lg">
+                      / {plus.prices[option].unit}
+                    </span>
+                  </span>
+                ))}
+              </span>
+            </span>
           </p>
-          <ul className="mt-10 flex flex-col gap-3 border-t border-surface/15 pt-8">
-            {plus.features.map((feature) => (
-              <li key={feature} className="flex gap-3 text-base">
-                <CheckIcon className="text-accent" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-12 flex flex-col gap-4 md:mt-auto md:pt-12">
-            <ButtonLink href={plus.cta.href} variant="accent" size="lg" className="w-full">
+
+          <div className="mt-8 border-t border-surface/15 pt-8">
+            <FeatureList items={plus.features} tone="dark" />
+          </div>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5 lg:mt-auto lg:pt-12">
+            <ButtonLink href={plus.cta.href} variant="accent" size="lg" className="w-full sm:w-auto">
               {plus.cta.label}
             </ButtonLink>
-            <p className="text-center text-xs text-surface/60">{plus.note}</p>
+            <p className="text-center text-xs text-surface/60 sm:text-left">{plus.note}</p>
           </div>
         </Reveal>
       </div>

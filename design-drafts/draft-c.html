@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STYLESEED 시안 C · Hang Tag</title>
+<meta name="theme-color" content="#f0eee6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300..800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  :root {
+    --bg: #f0eee6;
+    --surface: #ffffff;
+    --ink: #141414;
+    --muted: #6b6b6b;
+    --rose: #c2456e;
+    --line: rgba(20, 20, 20, 0.14);
+    --burgundy: #6e2233;
+    --olive: #6b6a3a;
+    --tape: rgba(232, 180, 194, 0.72);
+
+    --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", sans-serif;
+    --serif: "Hahmlet", "Apple Myungjo", serif;
+    --gutter: clamp(16px, 4vw, 48px);
+    --max: 1240px;
+    --shadow: 0 1px 2px rgba(20, 20, 20, 0.06), 0 18px 40px -22px rgba(20, 20, 20, 0.35);
+    --shadow-lift: 0 2px 4px rgba(20, 20, 20, 0.06), 0 34px 60px -26px rgba(20, 20, 20, 0.45);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    word-break: keep-all;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, p, ul, blockquote, figure { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 6px; }
+  ::selection { background: var(--rose); color: var(--surface); }
+  .em { color: var(--rose); }
+  .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+  .label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+  }
+  .label .spark { color: var(--rose); letter-spacing: 0; margin-right: 8px; }
+
+  .h2 {
+    margin-top: 18px;
+    font-family: var(--serif);
+    font-size: clamp(32px, 4.8vw, 60px);
+    font-weight: 600;
+    line-height: 1.28;
+    letter-spacing: -0.035em;
+  }
+  .h2 > span { display: block; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 54px;
+    padding: 0 26px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-ink { background: var(--ink); color: var(--surface); }
+  .btn-ink:hover { background: var(--rose); }
+  .btn-soft { background: var(--surface); box-shadow: var(--shadow); }
+  .btn-soft:hover { background: var(--ink); color: var(--surface); }
+  .btn-soft .play { color: var(--rose); font-size: 12px; }
+  .btn-rose { background: var(--rose); color: var(--surface); }
+  .btn-rose:hover { background: var(--surface); color: var(--ink); }
+  .btn-line { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .btn-line:hover { background: var(--ink); color: var(--surface); }
+
+  /* 마스킹 테이프 */
+  .taped { position: relative; }
+  .taped::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 84px;
+    height: 24px;
+    background: var(--tape);
+    transform: translateX(-50%) rotate(var(--tape-r, -4deg));
+    z-index: 2;
+    -webkit-mask: linear-gradient(90deg, transparent 0 3px, #000 3px calc(100% - 3px), transparent calc(100% - 3px));
+            mask: linear-gradient(90deg, transparent 0 3px, #000 3px calc(100% - 3px), transparent calc(100% - 3px));
+  }
+
+  /* ---------- 헤더 ---------- */
+  .site-head { position: absolute; inset: 0 0 auto; z-index: 30; }
+  .site-head .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .logo { font-size: 15px; font-weight: 800; letter-spacing: 0.18em; }
+  .logo .spark { color: var(--rose); letter-spacing: 0; margin-right: 6px; }
+  .nav { display: flex; align-items: center; gap: 2px; }
+  .nav a { padding: 8px 14px; font-size: 14px; font-weight: 500; color: rgba(20, 20, 20, 0.72); }
+  .nav a:hover { color: var(--ink); }
+  .nav .nav-cta { margin-left: 8px; background: var(--ink); color: var(--surface); border-radius: 999px; font-weight: 700; }
+  .nav .nav-cta:hover { background: var(--rose); }
+  @media (max-width: 760px) { .nav a:not(.nav-cta) { display: none; } }
+
+  /* ---------- 히어로: 무드보드 ---------- */
+  .hero { position: relative; }
+  .board {
+    position: relative;
+    max-width: 1440px;
+    min-height: max(760px, 100svh);
+    margin: 0 auto;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 5;
+    width: min(660px, 100%);
+    margin: 0 auto;
+    padding: clamp(150px, 20vh, 200px) var(--gutter) 80px;
+    text-align: center;
+  }
+  .hero-copy .label { display: inline-block; }
+  .hero h1 {
+    margin-top: 24px;
+    font-family: var(--serif);
+    font-size: clamp(40px, 5.6vw, 78px);
+    font-weight: 700;
+    line-height: 1.24;
+    letter-spacing: -0.045em;
+  }
+  .hero h1 span { display: block; }
+  .hero-copy p { max-width: 32ch; margin: 28px auto 0; font-size: 18px; line-height: 1.7; color: var(--muted); }
+  .hero-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px; }
+
+  .piece {
+    --r: 0deg;
+    --px: 0px;
+    --py: 0px;
+    --lift: 0px;
+    position: absolute;
+    z-index: 3;
+    transform: translate3d(var(--px), calc(var(--py) - var(--lift)), 0) rotate(var(--r));
+    transition: box-shadow 0.3s, --lift 0.3s;
+  }
+  .polaroid {
+    width: var(--w, 190px);
+    padding: 10px 10px 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .polaroid .img { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+  .polaroid .img svg { position: absolute; inset: 12% 14%; width: 72%; height: 76%; }
+  .polaroid figcaption { display: flex; flex-direction: column; gap: 2px; padding: 12px 2px 0; }
+  .polaroid b { font-size: 14px; font-weight: 700; }
+  .polaroid span { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .piece:hover { --lift: 8px; box-shadow: var(--shadow-lift); z-index: 6; }
+  @property --lift { syntax: "<length>"; inherits: false; initial-value: 0px; }
+
+  .phone-piece { width: var(--w, 220px); }
+  .phone {
+    position: relative;
+    aspect-ratio: 9 / 19.5;
+    border-radius: 2.4rem;
+    background: var(--ink);
+    padding: 3.5%;
+    box-shadow: var(--shadow-lift);
+  }
+  .screen {
+    position: relative;
+    height: 100%;
+    border-radius: 2.1rem;
+    overflow: hidden;
+    background: var(--bg);
+    padding: 20% 8% 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7%;
+  }
+  .screen::before { content: ""; position: absolute; top: 1.8%; left: 50%; width: 32%; height: 3.4%; border-radius: 99px; background: var(--ink); transform: translateX(-50%); }
+  .sk { height: 7px; border-radius: 99px; background: rgba(20, 20, 20, 0.12); }
+  .outfit { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border-radius: 16px; background: var(--surface); }
+  .outfit .p { position: relative; aspect-ratio: 1; border-radius: 10px; background: var(--bg); }
+  .outfit .p.tall { grid-row: span 2; aspect-ratio: auto; }
+  .outfit svg { position: absolute; inset: 12%; width: 76%; height: 76%; }
+  .gauge { height: 6px; border-radius: 99px; background: rgba(20, 20, 20, 0.1); overflow: hidden; }
+  .gauge i { display: block; width: 75%; height: 100%; background: var(--rose); }
+
+  /* 데스크톱 배치 */
+  .p-phone   { right: 6%;  top: 90px;   --r: 5deg;  --w: 220px; }
+  .p-blazer  { left: 4%;   top: 120px;  --r: -6deg; --w: 200px; --tape-r: 3deg; }
+  .p-loafer  { left: 17%;  top: 470px;  --r: 3deg;  --w: 150px; --tape-r: -8deg; }
+  .p-cardi   { left: 3%;   bottom: 40px; --r: -2deg; --w: 170px; }
+  .p-shirt   { right: 5%;  bottom: 30px; --r: -4deg; --w: 170px; --tape-r: 6deg; }
+  .p-shirt { z-index: 4; }
+
+  @media (max-width: 1139px) {
+    .board { min-height: 0; }
+    .hero-copy { padding-bottom: 32px; }
+    .pile { position: relative; height: 560px; max-width: 560px; margin: 0 auto 40px; }
+    .p-phone  { left: 50%; right: auto; top: 30px; --w: 190px; margin-left: -95px; z-index: 4; }
+    .p-blazer { left: 2%;  top: 20px;  --w: 150px; }
+    .p-cardi  { right: 2%; left: auto; top: 60px; bottom: auto; --w: 140px; --r: 5deg; }
+    .p-shirt  { left: 6%;  right: auto; top: 300px; bottom: auto; --w: 140px; --r: 4deg; z-index: 5; }
+    .p-loafer { right: 4%; left: auto; top: 330px; --w: 140px; --r: -5deg; z-index: 5; }
+  }
+  @media (max-width: 480px) {
+    .pile { height: 470px; }
+    .p-phone  { --w: 160px; margin-left: -80px; top: 24px; }
+    .p-blazer { --w: 118px; left: 0; }
+    .p-cardi  { --w: 112px; right: 0; top: 80px; }
+    .p-shirt  { --w: 112px; left: 0; top: 270px; }
+    .p-loafer { --w: 112px; right: 0; top: 290px; }
+    .polaroid { padding: 7px 7px 10px; }
+    .polaroid b { font-size: 12px; }
+    .polaroid span { font-size: 10px; }
+  }
+  @media (min-width: 1140px) { .pile { display: contents; } }
+
+  #sparkles { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
+
+  /* ---------- 문제 공감 ---------- */
+  .paradox { padding-top: clamp(80px, 10vw, 140px); }
+  .paradox-head { text-align: center; }
+  .sheet {
+    position: relative;
+    width: min(100%, 1040px);
+    margin: clamp(48px, 6vw, 72px) auto 0;
+    padding: clamp(36px, 5vw, 64px) clamp(24px, 5vw, 64px) clamp(110px, 12vw, 150px);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transform: rotate(-1deg);
+  }
+  .sheet::before { left: 18%; }
+  .sheet::after {
+    content: "";
+    position: absolute;
+    top: -12px;
+    right: 14%;
+    width: 84px;
+    height: 24px;
+    background: var(--tape);
+    transform: rotate(6deg);
+  }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); }
+  .stat + .stat { border-left: 1px dashed var(--line); padding-left: clamp(28px, 5vw, 72px); }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: clamp(112px, 15vw, 200px);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+  .stat-num small { font-size: 0.34em; font-weight: 500; color: var(--rose); letter-spacing: 0; margin-left: 4px; }
+  .stat h3 { margin-top: 24px; font-size: clamp(19px, 2vw, 23px); font-weight: 700; letter-spacing: -0.02em; }
+  .stat .meta { margin-top: 6px; font-size: 16px; color: var(--muted); }
+  .stat .src { margin-top: 20px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+
+  .quote-card {
+    position: relative;
+    z-index: 2;
+    width: min(92%, 600px);
+    margin: calc(clamp(110px, 12vw, 150px) * -0.62) 4% 0 auto;
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: 24px;
+    background: var(--ink);
+    color: var(--surface);
+    box-shadow: var(--shadow-lift);
+    transform: rotate(2deg);
+  }
+  .quote-card blockquote p { font-family: var(--serif); font-size: clamp(28px, 3.6vw, 44px); font-weight: 600; line-height: 1.3; letter-spacing: -0.04em; }
+  .quote-card .body { margin-top: 16px; font-size: 17px; line-height: 1.7; color: rgba(255, 255, 255, 0.7); }
+  .quote-card .body b { color: var(--rose); }
+
+  @media (max-width: 700px) {
+    .stats { grid-template-columns: 1fr; }
+    .stat + .stat { border-left: 0; padding-left: 0; border-top: 1px dashed var(--line); padding-top: 28px; }
+    .sheet { transform: rotate(-0.6deg); }
+    .quote-card { margin-right: auto; margin-left: auto; transform: rotate(1.2deg); }
+  }
+
+  /* ---------- 핵심 기능: 핀보드 ---------- */
+  .features { padding-top: clamp(96px, 12vw, 160px); }
+  .pinboard {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(24px, 3vw, 40px);
+    align-items: start;
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+  .note {
+    --r: 0deg;
+    position: relative;
+    padding: clamp(28px, 3vw, 40px);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transform: translateY(0) rotate(var(--r));
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.1, 1), box-shadow 0.35s;
+  }
+  .note::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    border-radius: 50%;
+    background: var(--rose);
+    box-shadow: inset -2px -3px 0 rgba(0, 0, 0, 0.18), 0 3px 4px rgba(20, 20, 20, 0.25);
+  }
+  .note:hover { transform: translateY(-6px) rotate(0deg); box-shadow: var(--shadow-lift); }
+  .note h3 { margin-top: 18px; font-family: var(--serif); font-size: clamp(26px, 2.6vw, 34px); font-weight: 600; line-height: 1.2; letter-spacing: -0.03em; }
+  .note p { margin-top: 12px; font-size: 16px; line-height: 1.7; color: var(--muted); }
+
+  .n1 { grid-column: 1 / span 4; --r: -2deg; }
+  .n2 { grid-column: 5 / span 4; --r: 1.5deg; margin-top: 56px; }
+  .n3 { grid-column: 9 / span 4; --r: -1deg; margin-top: 12px; }
+  .n4 { grid-column: 2 / span 4; --r: 2deg; margin-top: -8px; }
+  .n5 {
+    grid-column: 6 / span 7;
+    --r: -1.2deg;
+    margin-top: 16px;
+    padding: clamp(32px, 4vw, 56px);
+    border-radius: 24px;
+    background: var(--ink);
+    color: var(--surface);
+  }
+  .n5::before { background: var(--surface); }
+  .n5 h3 { font-size: clamp(30px, 3.4vw, 44px); }
+  .n5 h3 .spark { color: var(--rose); font-size: 0.55em; vertical-align: 0.4em; margin-left: 8px; }
+  .n5 .said { margin-top: 20px; font-family: var(--serif); font-size: clamp(20px, 2vw, 26px); font-weight: 400; line-height: 1.55; color: var(--surface); }
+  .n5 .said + p { margin-top: 10px; color: rgba(255, 255, 255, 0.65); }
+
+  @media (max-width: 959px) {
+    .pinboard { grid-template-columns: 1fr 1fr; }
+    .n1, .n2, .n3, .n4 { grid-column: auto; margin-top: 0; }
+    .n2, .n4 { margin-top: 36px; }
+    .n5 { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .pinboard { grid-template-columns: 1fr; gap: 28px; }
+    .n2, .n4 { margin-top: 0; }
+    .n1 { --r: -1.2deg; } .n2 { --r: 1deg; } .n3 { --r: -0.8deg; } .n4 { --r: 1.2deg; } .n5 { --r: -0.6deg; }
+  }
+
+  /* ---------- 요금제: 행택 ---------- */
+  .pricing { padding-top: clamp(96px, 12vw, 160px); }
+  .pricing-head { text-align: center; }
+  .cycle { display: inline-flex; margin-top: 32px; padding: 4px; border-radius: 999px; background: var(--surface); box-shadow: var(--shadow); }
+  .cycle button {
+    height: 42px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .cycle button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+
+  .rackline {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(24px, 5vw, 72px);
+    margin-top: clamp(40px, 6vw, 64px);
+    padding-top: 14px;
+  }
+  .rackline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(100%, 980px);
+    height: 14px;
+    border-radius: 99px;
+    background: linear-gradient(#2a2a2a, var(--ink));
+    transform: translateX(-50%);
+  }
+  .hang { display: flex; flex-direction: column; align-items: center; width: min(100%, 400px); }
+  .string { position: relative; z-index: 2; width: 2px; height: 56px; background: var(--muted); }
+  .hang-plus .string { background: var(--rose); }
+
+  .tag {
+    --hole: 34px;
+    position: relative;
+    width: 100%;
+    margin-top: -34px;
+    padding: 72px clamp(24px, 3vw, 40px) clamp(28px, 3vw, 40px);
+    transform-origin: 50% var(--hole);
+    filter: drop-shadow(0 22px 26px rgba(20, 20, 20, 0.2));
+  }
+  .tag-shape {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    clip-path: polygon(22% 0, 78% 0, 100% 64px, 100% 100%, 0 100%, 0 64px);
+    -webkit-mask: radial-gradient(circle at 50% var(--hole), transparent 8px, #000 9px);
+            mask: radial-gradient(circle at 50% var(--hole), transparent 8px, #000 9px);
+    border-radius: 0 0 22px 22px;
+  }
+  .tag-ring {
+    position: absolute;
+    top: calc(var(--hole) - 15px);
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin-left: -15px;
+    border-radius: 50%;
+    border: 5px solid var(--bg);
+  }
+  .tag > :not(.tag-shape):not(.tag-ring) { position: relative; }
+  .hang-plus .tag-shape { background: var(--ink); }
+  .hang-plus .tag { color: var(--surface); }
+  .hang-plus .tag-ring { border-color: var(--rose); }
+
+  .tag-name { text-align: center; font-family: var(--serif); font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .tag-name .spark { color: var(--rose); font-size: 0.55em; vertical-align: 0.5em; margin-left: 4px; }
+  .tag-price { display: flex; justify-content: center; align-items: baseline; gap: 8px; margin-top: 14px; padding-bottom: 24px; border-bottom: 1px dashed var(--line); }
+  .hang-plus .tag-price { border-bottom-color: rgba(255, 255, 255, 0.22); }
+  .tag-price .amt { font-family: var(--serif); font-size: clamp(44px, 5vw, 58px); font-weight: 700; letter-spacing: -0.05em; line-height: 1.1; }
+  .tag-price .unit { font-size: 16px; color: rgba(255, 255, 255, 0.6); }
+  .tag ul { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+  .tag li { display: flex; gap: 12px; font-size: 16px; line-height: 1.5; }
+  .tag li::before { content: "✦"; flex: none; font-size: 11px; line-height: 24px; color: rgba(20, 20, 20, 0.3); }
+  .hang-plus .tag li::before { color: var(--rose); }
+  .tag .btn { width: 100%; margin-top: 32px; }
+  .tag .note-small { margin-top: 12px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+
+  .tag.swing { animation: swing 1.4s cubic-bezier(0.3, 0.6, 0.3, 1); }
+  @keyframes swing {
+    0% { transform: rotate(0); }
+    18% { transform: rotate(7deg); }
+    40% { transform: rotate(-4.5deg); }
+    62% { transform: rotate(2.4deg); }
+    82% { transform: rotate(-1deg); }
+    100% { transform: rotate(0); }
+  }
+  .hang:hover .tag:not(.swing) { animation: sway 2.2s ease-in-out; }
+  @keyframes sway { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-2deg); } 65% { transform: rotate(1.4deg); } }
+
+  @media (max-width: 800px) {
+    .rackline { flex-direction: column; align-items: center; gap: 12px; padding-top: 0; }
+    .rackline::before { display: none; }
+    .hang { position: relative; padding-top: 14px; }
+    .hang::before { content: ""; position: absolute; top: 0; left: 50%; width: 120px; height: 12px; margin-left: -60px; border-radius: 99px; background: var(--ink); }
+  }
+
+  .site-foot { margin-top: clamp(96px, 12vw, 160px); padding-bottom: 40px; }
+  .site-foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+  .site-foot b { color: var(--ink); letter-spacing: 0.18em; }
+  .site-foot b .spark { color: var(--rose); letter-spacing: 0; margin-right: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-blazer" viewBox="0 0 100 120">
+    <path d="M30 10 L42 5 L50 32 L58 5 L70 10 L88 24 L93 100 L79 102 L76 58 L75 114 L25 114 L24 58 L21 102 L7 100 L12 24 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M42 5 L39 42 L50 62 L61 42 L58 5" fill="none" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="50" cy="76" r="2.4" fill="var(--g-line)"/><circle cx="50" cy="90" r="2.4" fill="var(--g-line)"/>
+  </symbol>
+  <symbol id="g-cardigan" viewBox="0 0 100 120">
+    <path d="M34 8 Q50 16 66 8 L88 20 L94 98 L80 100 L76 50 L76 114 L24 114 L24 50 L20 100 L6 98 L12 20 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M34 8 L50 46 L66 8 M50 46 L50 114" fill="none" stroke="var(--g-line)" stroke-width="2"/>
+    <circle cx="54" cy="60" r="2.2" fill="var(--g-line)"/><circle cx="54" cy="76" r="2.2" fill="var(--g-line)"/><circle cx="54" cy="92" r="2.2" fill="var(--g-line)"/>
+  </symbol>
+  <symbol id="g-shirt" viewBox="0 0 100 120">
+    <path d="M36 8 L50 16 L64 8 L86 20 L93 72 L80 74 L76 40 L76 114 L24 114 L24 40 L20 74 L7 72 L14 20 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M36 8 L43 24 L50 16 L57 24 L64 8 M50 16 L50 114" fill="none" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="g-loafer" viewBox="0 0 120 80">
+    <path d="M8 56 Q8 36 30 33 L60 29 Q82 27 98 40 Q116 48 113 58 Q112 66 100 66 L16 66 Q8 66 8 56 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M10 60 L111 60 M50 32 Q64 46 82 34" fill="none" stroke="var(--g-line)" stroke-width="2"/>
+  </symbol>
+</svg>
+
+<canvas id="sparkles" aria-hidden="true"></canvas>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="spark" aria-hidden="true">✦</span>STYLESEED</a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="#how">서비스 소개</a>
+      <a href="#features">기능</a>
+      <a href="#pricing">요금제</a>
+      <a href="#login">로그인</a>
+      <a class="nav-cta" href="#signup">무료로 시작하기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ============ 히어로 · 무드보드 ============ -->
+  <section class="hero" id="hero" aria-labelledby="hero-title" data-sparkle="strong">
+    <div class="board">
+      <div class="hero-copy">
+        <p class="label"><span class="spark" aria-hidden="true">✦</span>AI PERSONAL STYLING</p>
+        <h1 id="hero-title">
+          <span>새로 사기 전에,</span>
+          <span class="em">이미 가진 옷부터.</span>
+        </h1>
+        <p>내 옷장 속 옷으로 되고 싶은 스타일을 먼저 완성하고, 정말 필요한 옷만 사게 도와드려요.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-ink" href="#signup">무료로 시작하기</a>
+          <a class="btn btn-soft" href="#video"><span class="play" aria-hidden="true">▶</span>소개 영상 보기</a>
+        </div>
+      </div>
+
+      <div class="pile">
+        <div class="piece phone-piece p-phone" data-depth="0.5">
+          <div class="phone" role="img" aria-label="STYLESEED 앱에서 내 옷으로 만든 코디 추천 화면">
+            <div class="screen" aria-hidden="true">
+              <div class="sk" style="width:36%"></div>
+              <div class="sk" style="width:70%;height:12px;background:rgba(20,20,20,.22);margin-top:-4%"></div>
+              <div class="outfit">
+                <div class="p tall"><svg style="--g-fill:var(--burgundy);--g-line:var(--ink)"><use href="#g-blazer"/></svg></div>
+                <div class="p"><svg style="--g-fill:#fff;--g-line:var(--ink)"><use href="#g-shirt"/></svg></div>
+                <div class="p"><svg style="--g-fill:var(--ink);--g-line:var(--ink)"><use href="#g-loafer"/></svg></div>
+              </div>
+              <div class="gauge"><i></i></div>
+              <div class="sk" style="width:58%"></div>
+            </div>
+          </div>
+        </div>
+
+        <figure class="piece polaroid taped p-blazer" data-depth="1.1">
+          <div class="img" style="background:#eadfdc" role="img" aria-label="버건디 울 블레이저"><svg style="--g-fill:var(--burgundy);--g-line:var(--ink)"><use href="#g-blazer"/></svg></div>
+          <figcaption><b>울 블레이저</b><span>Burgundy · Wool</span></figcaption>
+        </figure>
+        <figure class="piece polaroid taped p-cardi" data-depth="0.8">
+          <div class="img" style="background:#e5e4d6" role="img" aria-label="올리브 니트 가디건"><svg style="--g-fill:var(--olive);--g-line:var(--ink)"><use href="#g-cardigan"/></svg></div>
+          <figcaption><b>니트 가디건</b><span>Olive · Knit</span></figcaption>
+        </figure>
+        <figure class="piece polaroid taped p-shirt" data-depth="1.4">
+          <div class="img" style="background:var(--bg)" role="img" aria-label="화이트 코튼 셔츠"><svg style="--g-fill:#fff;--g-line:var(--ink)"><use href="#g-shirt"/></svg></div>
+          <figcaption><b>코튼 셔츠</b><span>White · Cotton</span></figcaption>
+        </figure>
+        <figure class="piece polaroid taped p-loafer" data-depth="1.8">
+          <div class="img" style="background:#e2e0da" role="img" aria-label="블랙 레더 로퍼"><svg style="--g-fill:var(--ink);--g-line:var(--ink);inset:20% 8%;width:84%;height:60%"><use href="#g-loafer"/></svg></div>
+          <figcaption><b>레더 로퍼</b><span>Black · Leather</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 문제 공감 ============ -->
+  <section class="paradox" id="paradox" aria-labelledby="paradox-title">
+    <div class="wrap">
+      <div class="paradox-head">
+        <p class="label"><span class="spark" aria-hidden="true">✦</span>STYLESEED · CLOSET PARADOX</p>
+        <h2 class="h2" id="paradox-title">
+          <span>옷장은 가득 찼는데,</span>
+          <span><span class="em">입지 않는 옷</span>이 쌓여요</span>
+        </h2>
+      </div>
+
+      <div class="sheet taped">
+        <div class="stats">
+          <article class="stat">
+            <p class="stat-num">22<small>%</small></p>
+            <h3>1년간 한 번도 입지 않은 옷</h3>
+            <p class="meta">평균 198벌 보유</p>
+            <p class="src">벨기에 플랑드르 성인 156명 옷장 조사, 2024</p>
+          </article>
+          <article class="stat">
+            <p class="stat-num">26<small>%</small></p>
+            <h3>최근 1년간 입지 않은 옷</h3>
+            <p class="meta">평균 118벌 보유</p>
+            <p class="src">영국 WRAP 조사</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        <blockquote><p>“앞으로 입을 것 같아서”</p></blockquote>
+        <p class="body">버리지 못하는 이유예요. 입을 의지는 있지만, <b>언제·어떻게 입을지</b> 연결되지 않았을 뿐이에요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 핵심 기능 · 핀보드 ============ -->
+  <section class="features" id="features" aria-labelledby="features-title">
+    <div class="wrap">
+      <p class="label"><span class="spark" aria-hidden="true">✦</span>STYLESEED · FEATURES</p>
+      <h2 class="h2" id="features-title">
+        <span>매일 옷장을 여는</span>
+        <span class="em">새로운 방법</span>
+      </h2>
+
+      <ul class="pinboard">
+        <li class="note n1">
+          <h3>Digital Closet</h3>
+          <p>내 옷을 한눈에. 소수의 옷만 등록해도 첫 코디를 바로 받아요.</p>
+        </li>
+        <li class="note n2">
+          <h3>Core 코디</h3>
+          <p>되고 싶은 스타일을 고르면 내 옷으로 그 무드를 완성해요.</p>
+        </li>
+        <li class="note n3">
+          <h3>오늘의 코디</h3>
+          <p>오늘 날씨에 맞춰 지금 바로 입을 수 있는 코디를 알려줘요.</p>
+        </li>
+        <li class="note n4">
+          <h3>Missing Item</h3>
+          <p>원하는 스타일에 정말 부족한 아이템만 알려줘요.</p>
+        </li>
+        <li class="note n5">
+          <h3>살까 말까 판단<span class="spark" aria-hidden="true">✦</span></h3>
+          <p class="said">“내 옷 42벌 중 15벌과 조합 가능, 새 코디 12개, 비슷한 옷 1개 보유”</p>
+          <p>처럼 사기 전에 확인해요.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 요금제 · 행택 ============ -->
+  <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+    <div class="wrap">
+      <div class="pricing-head">
+        <p class="label"><span class="spark" aria-hidden="true">✦</span>STYLESEED · PRICING</p>
+        <h2 class="h2" id="pricing-title">
+          <span>옷장 저장이 아니라,</span>
+          <span class="em">더 나은 코디와 구매 판단에</span>
+        </h2>
+        <div class="cycle" role="group" aria-label="PLUS 결제 주기">
+          <button type="button" data-cycle="monthly" aria-pressed="true">월간</button>
+          <button type="button" data-cycle="yearly" aria-pressed="false">연간</button>
+        </div>
+      </div>
+
+      <div class="rackline">
+        <div class="hang hang-free">
+          <span class="string" aria-hidden="true"></span>
+          <article class="tag">
+            <span class="tag-shape" aria-hidden="true"></span>
+            <span class="tag-ring" aria-hidden="true"></span>
+            <h3 class="tag-name">Free</h3>
+            <p class="tag-price"><span class="amt">0원</span></p>
+            <ul>
+              <li>옷 등록 · AI 분석</li>
+              <li>Digital Closet</li>
+              <li>보유 의류 기반 기본 코디</li>
+              <li>Missing Item 탐지</li>
+            </ul>
+            <a class="btn btn-line" href="#signup">무료로 시작하기</a>
+          </article>
+        </div>
+
+        <div class="hang hang-plus">
+          <span class="string" aria-hidden="true"></span>
+          <article class="tag" id="plus-tag">
+            <span class="tag-shape" aria-hidden="true"></span>
+            <span class="tag-ring" aria-hidden="true"></span>
+            <h3 class="tag-name">PLUS<span class="spark" aria-hidden="true">✦</span></h3>
+            <p class="tag-price" id="plus-price" aria-live="polite"><span class="amt">5,900원</span><span class="unit">/ 월</span></p>
+            <ul>
+              <li>Free의 모든 기능</li>
+              <li>내 취향을 학습하는 개인화 추천</li>
+              <li>살까 말까 판단 (Wardrobe Decision)</li>
+              <li>Ideal Style 분석</li>
+              <li>트렌드 코디</li>
+            </ul>
+            <a class="btn btn-rose" href="#signup">PLUS 시작하기</a>
+            <p class="note-small">초기 가격이며 변경될 수 있어요</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <b><span class="spark" aria-hidden="true">✦</span>STYLESEED</b>
+    <span>AI PERSONAL STYLING</span>
+    <span>© 2026 STYLESEED</span>
+  </div>
+</footer>
+
+<script>
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  // 1. 무드보드: 마우스 위치에 따라 조각들이 깊이별로 움직여요
+  (function () {
+    if (reduceMotion || !finePointer) return;
+    var hero = document.getElementById("hero");
+    var pieces = Array.prototype.slice.call(hero.querySelectorAll("[data-depth]"));
+    var tx = 0, ty = 0, cx = 0, cy = 0, running = false;
+    function loop() {
+      cx += (tx - cx) * 0.08;
+      cy += (ty - cy) * 0.08;
+      pieces.forEach(function (el) {
+        var d = +el.dataset.depth;
+        el.style.setProperty("--px", (cx * d * 18).toFixed(2) + "px");
+        el.style.setProperty("--py", (cy * d * 14).toFixed(2) + "px");
+      });
+      if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) requestAnimationFrame(loop);
+      else running = false;
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(loop); } }
+    hero.addEventListener("pointermove", function (e) {
+      var r = hero.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      kick();
+    });
+    hero.addEventListener("pointerleave", function () { tx = 0; ty = 0; kick(); });
+  })();
+
+  // 2. 커서 반짝임: 히어로에서는 선명하게, 나머지는 옅게
+  (function () {
+    if (reduceMotion || !finePointer) return;
+    var canvas = document.getElementById("sparkles"), ctx = canvas.getContext("2d");
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), parts = [], lastX = -99, lastY = -99, raf = 0;
+    function resize() { canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    resize(); addEventListener("resize", resize);
+    function star(x, y, s, rot) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.beginPath();
+      for (var i = 0; i < 4; i++) {
+        ctx.rotate(Math.PI / 2);
+        ctx.quadraticCurveTo(s * 0.12, -s * 0.12, 0, -s);
+        ctx.quadraticCurveTo(-s * 0.12, -s * 0.12, 0, 0);
+      }
+      ctx.fill(); ctx.restore();
+    }
+    function tick(now) {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      parts = parts.filter(function (p) { return now - p.born < p.life; });
+      parts.forEach(function (p) {
+        var t = (now - p.born) / p.life;
+        ctx.globalAlpha = p.alpha * (1 - t);
+        ctx.fillStyle = "#c2456e";
+        star(p.x + p.vx * t * 30, p.y + p.vy * t * 30, p.size * (1 - t * 0.5), p.rot + t);
+      });
+      raf = parts.length ? requestAnimationFrame(tick) : 0;
+    }
+    addEventListener("pointermove", function (e) {
+      if (Math.hypot(e.clientX - lastX, e.clientY - lastY) < 16) return;
+      lastX = e.clientX; lastY = e.clientY;
+      var strong = !!(e.target.closest && e.target.closest("[data-sparkle='strong']"));
+      if (parts.length > 60) parts.shift();
+      parts.push({ x: e.clientX, y: e.clientY, vx: Math.random() * 2 - 1, vy: Math.random() * 2 - 0.4, size: 4 + Math.random() * 6, rot: Math.random() * 3, born: performance.now(), life: 600, alpha: strong ? 0.95 : 0.3 });
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+  })();
+
+  // 3. 요금제: 주기를 바꾸면 PLUS 택이 흔들리며 가격이 바뀌어요
+  (function () {
+    var prices = { monthly: ["5,900원", "월"], yearly: ["59,000원", "년"] };
+    var tag = document.getElementById("plus-tag"), price = document.getElementById("plus-price");
+    var buttons = document.querySelectorAll("[data-cycle]");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (btn.getAttribute("aria-pressed") === "true") return;
+        var c = prices[btn.dataset.cycle];
+        buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+        price.innerHTML = '<span class="amt">' + c[0] + '</span><span class="unit">/ ' + c[1] + "</span>";
+        tag.classList.remove("swing"); void tag.offsetWidth; tag.classList.add("swing");
+      });
+    });
+    tag.addEventListener("animationend", function () { tag.classList.remove("swing"); });
+  })();
+</script>
+</body>
+</html>

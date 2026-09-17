@@ -11,6 +11,7 @@ type SectionHeadingProps = SectionHeadingContent & {
   className?: string;
 };
 
+/** 로즈핑크 짧은 선 + 넓은 영문 라벨 */
 export function SectionLabel({
   children,
   tone = "light",
@@ -23,20 +24,18 @@ export function SectionLabel({
   return (
     <p
       className={cn(
-        "flex items-center gap-2 text-[11px] font-semibold uppercase tracking-label md:text-xs",
-        tone === "light" ? "text-muted" : "text-surface/60",
+        "flex items-center gap-2.5 font-wide text-[11px] font-bold tracking-label uppercase font-stretch-expanded md:text-xs",
+        tone === "light" ? "text-ink" : "text-surface",
         className,
       )}
     >
-      <span aria-hidden="true" className="text-accent">
-        ✦
-      </span>
+      <span aria-hidden="true" className="h-0.5 w-7 shrink-0 bg-accent" />
       {children}
     </p>
   );
 }
 
-/** 영문 대문자 라벨 + 두 줄 제목(`**강조**` 부분만 로즈핑크) + 선택 설명 */
+/** 영문 라벨 + 두 줄 제목(`**강조**` 부분만 로즈핑크) + 선택 설명 */
 export function SectionHeading({
   id,
   label,
@@ -61,7 +60,7 @@ export function SectionHeading({
       <Heading
         id={id}
         className={cn(
-          "text-[32px] leading-[1.25] font-bold tracking-[-0.035em] md:text-5xl md:leading-[1.2] lg:text-[56px]",
+          "text-[34px] leading-[1.14] font-extrabold tracking-[-0.05em] md:text-[52px] lg:text-[64px]",
           tone === "light" ? "text-ink" : "text-surface",
         )}
       >

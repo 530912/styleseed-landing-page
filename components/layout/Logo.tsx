@@ -15,7 +15,7 @@ export function Logo({
       href={routes.home}
       aria-label={`${siteConfig.name} 홈`}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-sm text-[15px] font-extrabold tracking-[0.18em]",
+        "inline-flex items-center gap-1.5 rounded-sm font-wide text-[17px] font-black tracking-[-0.01em] font-stretch-expanded",
         tone === "light" ? "text-ink" : "text-surface",
         className,
       )}

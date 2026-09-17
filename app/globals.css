@@ -16,19 +16,20 @@
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 
-  --tracking-label: 0.22em;
+  --tracking-label: 0.08em;
 
-  --animate-float: float 7s ease-in-out infinite;
+  --radius-card: 28px;
+}
 
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
+/*
+ * 영문 디스플레이 서체 (Archivo, 폭 62~125%).
+ * font-wide 와 font-stretch-expanded(125%) 를 함께 쓰고,
+ * 한글은 Pretendard로 자동 대체돼요.
+ */
+@theme inline {
+  --font-wide:
+    var(--font-archivo), "Pretendard Variable", Pretendard, -apple-system,
+    system-ui, sans-serif;
 }
 
 @layer base {
@@ -59,7 +60,32 @@
   }
 }
 
+/* 스크롤 고정(sticky) 연출은 화면이 충분히 넓고 높을 때만 써요 */
+@custom-variant tall (@media (min-width: 1024px) and (min-height: 760px));
+
+/* 섹션 공통 좌우 여백과 최대 너비 (390px에서 16px) */
+@utility container-page {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+}
+
+/* 화면 끝까지 이어지는 가로 레일: 왼쪽 시작점만 본문과 맞춰요 */
+@utility rail-inset {
+  padding-inline: max(clamp(16px, 4vw, 48px), calc((100% - 1320px) / 2 + clamp(16px, 4vw, 48px)));
+  scroll-padding-inline: max(clamp(16px, 4vw, 48px), calc((100% - 1320px) / 2 + clamp(16px, 4vw, 48px)));
+}
+
 @utility text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 9%, transparent);
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 12%, transparent);
+}
+
+/* 가로로 스크롤되는 영역의 스크롤바 숨기기 */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -5,16 +5,24 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { insight } from "@/content/landing";
 
+/** Core 무드 이미지가 없을 때: 그 무드의 대표 색을 세로 띠로 */
+function SwatchBands({ swatches }: { swatches: string[] }) {
+  return (
+    <div aria-hidden="true" className="flex h-full">
+      {swatches.map((swatch) => (
+        <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
+      ))}
+    </div>
+  );
+}
+
 export function Insight() {
   return (
     <Section id="insight" labelledBy="insight-title" className="overflow-hidden">
-      {/* 배경 레이어: 서로 다른 속도로 천천히 이동 */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <Parallax speed={0.5} className="absolute top-[18%] -right-[10%] md:right-[2%]">
-          <div className="size-[320px] rounded-full bg-accent/10 blur-3xl md:size-[520px]" />
-        </Parallax>
-        <Parallax speed={0.25} className="absolute top-0 left-0 w-full">
-          <p className="text-outline text-[22vw] leading-none font-black tracking-[-0.05em] whitespace-nowrap select-none lg:text-[200px]">
+      {/* 배경 레이어: 본문보다 느리게 이동 */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-[42%] md:top-[36%]">
+        <Parallax speed={0.3}>
+          <p className="text-outline text-right font-wide text-[28vw] leading-[0.8] font-black tracking-[-0.03em] whitespace-nowrap select-none font-stretch-[62%] lg:text-[300px]">
             {insight.backgroundWord}
           </p>
         </Parallax>
@@ -23,36 +31,35 @@ export function Insight() {
       <div className="relative">
         <SectionHeading id="insight-title" {...insight.heading} />
 
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 md:mt-20 md:gap-5 lg:grid-cols-4">
+        <ul className="-mx-[clamp(16px,4vw,48px)] mt-12 flex snap-x snap-mandatory gap-3 overflow-x-auto rail-inset scrollbar-none md:mt-16 md:gap-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
           {insight.cores.map((core, i) => (
-            <Reveal as="li" key={core.name} delay={i * 0.08}>
-              <article className="group h-full rounded-[28px] bg-surface p-3 transition-transform duration-500 ease-out hover:scale-[1.03] motion-reduce:transition-none motion-reduce:hover:scale-100">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[20px]">
+            <Reveal
+              as="li"
+              key={core.name}
+              delay={i * 0.08}
+              className="w-[76vw] shrink-0 snap-start sm:w-[46vw] lg:w-auto"
+            >
+              <article className="flex h-full flex-col rounded-card bg-surface p-3">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[18px]">
                   <MaybeImage
                     src={core.image.src}
                     alt={core.image.alt}
-                    sizes="(min-width: 1024px) 270px, (min-width: 640px) 50vw, 100vw"
+                    sizes="(min-width: 1024px) 300px, 76vw"
+                    placeholder={<SwatchBands swatches={core.swatches} />}
                   />
-                  <div className="absolute bottom-3 left-3 flex gap-1.5" aria-hidden="true">
-                    {core.swatches.map((swatch) => (
-                      <span
-                        key={swatch}
-                        className="size-4 rounded-full ring-2 ring-surface"
-                        style={{ backgroundColor: swatch }}
-                      />
-                    ))}
-                  </div>
                 </div>
-                <div className="px-3 pt-5 pb-3">
-                  <h3 className="text-xl font-extrabold tracking-[0.08em]">{core.name}</h3>
-                  <p className="mt-1.5 text-sm text-muted">{core.mood}</p>
-                  <dl className="mt-5 grid grid-cols-[3.5rem_1fr] gap-x-2 gap-y-2 border-t border-ink/10 pt-4 text-sm">
+                <div className="flex flex-1 flex-col px-3 pt-5 pb-3">
+                  <h3 className="font-wide text-[22px] leading-none font-extrabold tracking-[-0.02em] font-stretch-expanded">
+                    {core.name}
+                  </h3>
+                  <p className="mt-2.5 mb-5 text-sm text-muted">{core.mood}</p>
+                  <dl className="mt-auto grid grid-cols-[3.5rem_1fr] gap-x-2 gap-y-2 border-t border-ink/10 pt-4 text-sm">
                     <dt className="text-muted">컬러</dt>
-                    <dd className="font-medium">{core.colors}</dd>
+                    <dd className="font-semibold">{core.colors}</dd>
                     <dt className="text-muted">소재</dt>
-                    <dd className="font-medium">{core.materials}</dd>
+                    <dd className="font-semibold">{core.materials}</dd>
                     <dt className="text-muted">아이템</dt>
-                    <dd className="font-medium">{core.items}</dd>
+                    <dd className="font-semibold">{core.items}</dd>
                   </dl>
                 </div>
               </article>
@@ -60,7 +67,7 @@ export function Insight() {
           ))}
         </ul>
 
-        <p className="mt-8 text-xs text-muted">{insight.source}</p>
+        <p className="mt-6 text-xs text-muted md:mt-8">{insight.source}</p>
       </div>
     </Section>
   );

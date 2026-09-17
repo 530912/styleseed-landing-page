@@ -31,13 +31,11 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
-        solid
-          ? "border-b border-ink/10 bg-bg/85 backdrop-blur-md"
-          : "border-b border-transparent",
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-300",
+        solid ? "bg-bg/85 backdrop-blur-md" : "bg-transparent",
       )}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 md:px-8">
+      <div className="flex h-16 items-center justify-between container-page">
         <Logo />
 
         <nav aria-label="주요 메뉴" className="hidden md:block">
@@ -46,7 +44,7 @@ export function SiteHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="rounded-full px-3.5 py-2 text-sm font-medium text-ink/75 transition-colors hover:text-ink"
+                  className="rounded-full px-3.5 py-2 text-sm font-medium text-ink/70 transition-colors hover:text-ink"
                 >
                   {item.label}
                 </Link>
@@ -87,7 +85,7 @@ export function SiteHeader() {
       <div
         id="mobile-menu"
         hidden={!menuOpen}
-        className="border-t border-ink/10 bg-bg px-5 pt-4 pb-8 md:hidden"
+        className="border-t border-ink/10 bg-bg px-4 pt-4 pb-8 md:hidden"
       >
         <nav aria-label="모바일 메뉴">
           <ul className="flex flex-col">
@@ -96,7 +94,7 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   onClick={closeMenu}
-                  className="block py-3 text-2xl font-bold tracking-tight text-ink"
+                  className="block py-3 text-[28px] font-extrabold tracking-[-0.04em] text-ink"
                 >
                   {item.label}
                 </Link>

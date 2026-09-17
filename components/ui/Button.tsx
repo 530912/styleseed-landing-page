@@ -3,22 +3,23 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "accent" | "outline" | "outlineLight" | "ghost";
+type Variant = "primary" | "accent" | "outline" | "outlineLight" | "soft" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-surface hover:bg-ink/85",
-  accent: "bg-accent text-surface hover:brightness-110",
-  outline: "border border-ink/20 text-ink hover:border-ink hover:bg-ink/5",
+  primary: "bg-ink text-surface hover:bg-accent",
+  accent: "bg-accent text-surface hover:bg-surface hover:text-ink",
+  outline: "text-ink shadow-[inset_0_0_0_1.5px_var(--color-ink)] hover:bg-ink hover:text-surface",
   outlineLight:
-    "border border-surface/25 text-surface hover:border-surface hover:bg-surface/10",
-  ghost: "text-ink hover:bg-ink/5",
+    "text-surface shadow-[inset_0_0_0_1.5px_rgb(255_255_255/0.4)] hover:bg-surface hover:text-ink",
+  soft: "bg-ink/[0.06] text-ink hover:bg-ink/[0.12]",
+  ghost: "text-ink/75 hover:text-ink",
 };
 
 const sizes: Record<Size, string> = {
   sm: "h-10 px-4 text-sm",
   md: "h-12 px-6 text-[15px]",
-  lg: "h-14 px-7 text-base",
+  lg: "h-14 px-7 text-[15px]",
 };
 
 type ButtonLinkProps = {
@@ -40,7 +41,7 @@ export function ButtonLink({
   onClick,
 }: ButtonLinkProps) {
   const classes = cn(
-    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-[background-color,border-color,filter,transform] duration-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent",
+    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-bold whitespace-nowrap transition-[background-color,color,transform] duration-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent",
     variants[variant],
     sizes[size],
     className,

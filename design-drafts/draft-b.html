@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STYLESEED 시안 B · The Rack</title>
+<meta name="theme-color" content="#f0eee6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+  :root {
+    --bg: #f0eee6;
+    --surface: #ffffff;
+    --ink: #141414;
+    --muted: #6b6b6b;
+    --rose: #c2456e;
+    --line: rgba(20, 20, 20, 0.14);
+    --burgundy: #6e2233;
+    --olive: #6b6a3a;
+
+    --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", sans-serif;
+    /* 라틴 글자는 Archivo Expanded, 한글은 Pretendard로 자동 대체 */
+    --wide: "Archivo", "Pretendard Variable", Pretendard, sans-serif;
+    --gutter: clamp(16px, 4vw, 48px);
+    --max: 1320px;
+    --radius: 28px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    word-break: keep-all;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, p, ul, blockquote, figure { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; border-radius: 6px; }
+  ::selection { background: var(--rose); color: var(--surface); }
+  .em { color: var(--rose); }
+  .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--wide);
+    font-stretch: 125%;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .label::before { content: ""; width: 28px; height: 2px; background: var(--rose); }
+
+  .h2 {
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.05em;
+  }
+  .h2 > span { display: block; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .btn-ink { background: var(--ink); color: var(--surface); }
+  .btn-ink:hover { background: var(--rose); }
+  .btn-ghost { background: rgba(20, 20, 20, 0.06); }
+  .btn-ghost:hover { background: rgba(20, 20, 20, 0.12); }
+  .btn-ghost .play { color: var(--rose); font-size: 12px; }
+  .btn-rose { background: var(--rose); color: var(--surface); }
+  .btn-rose:hover { background: var(--surface); color: var(--ink); }
+  .btn-line { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .btn-line:hover { background: var(--ink); color: var(--surface); }
+
+  /* ---------- 헤더 ---------- */
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(240, 238, 230, 0.86);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .site-head .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-family: var(--wide); font-stretch: 125%; font-weight: 900; font-size: 17px; letter-spacing: -0.01em; }
+  .logo .spark { color: var(--rose); margin-right: 6px; }
+  .nav { display: flex; align-items: center; gap: 2px; }
+  .nav a { padding: 8px 14px; font-size: 14px; font-weight: 500; color: rgba(20, 20, 20, 0.72); }
+  .nav a:hover { color: var(--ink); }
+  .nav .nav-cta { margin-left: 10px; background: var(--ink); color: var(--surface); border-radius: 999px; font-weight: 700; }
+  .nav .nav-cta:hover { background: var(--rose); }
+  @media (max-width: 760px) { .nav a:not(.nav-cta) { display: none; } }
+
+  /* ---------- 히어로 ---------- */
+  .hero { padding: clamp(24px, 4vw, 40px) 0 0; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(16px, 2vw, 24px);
+    min-height: min(720px, calc(100svh - 140px));
+  }
+  .hero-copy {
+    grid-column: 1 / span 7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    padding: clamp(8px, 2vw, 24px) 0 clamp(8px, 2vw, 24px);
+  }
+  .hero h1 {
+    margin-top: 28px;
+    font-size: clamp(44px, 7.6vw, 112px);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.065em;
+  }
+  .hero h1 span { display: block; }
+  .hero-bottom { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; }
+  .hero-bottom p { max-width: 30ch; font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; color: var(--muted); }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .hero-panel {
+    grid-column: 8 / span 5;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--surface);
+  }
+  .panel-word {
+    position: absolute;
+    left: -0.04em;
+    bottom: -0.16em;
+    font-family: var(--wide);
+    font-stretch: 62%;
+    font-weight: 900;
+    font-size: clamp(120px, 15vw, 230px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .panel-phone {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: clamp(190px, 17vw, 250px);
+    translate: -50% -50%;
+    will-change: transform;
+  }
+  .panel-tag {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px 8px 8px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    will-change: transform;
+  }
+  .panel-tag .dot { width: 28px; height: 28px; border-radius: 50%; }
+  .panel-tag b { font-size: 13px; font-weight: 700; }
+  .panel-tag span { font-family: var(--wide); font-stretch: 112%; font-size: 11px; color: var(--muted); }
+  .panel-tag.t1 { left: 7%; top: 14%; }
+  .panel-tag.t2 { right: 6%; bottom: 20%; }
+
+  .phone {
+    position: relative;
+    aspect-ratio: 9 / 19.5;
+    border-radius: 2.4rem;
+    background: #2a2a2a;
+    padding: 3.2%;
+    box-shadow: 0 50px 80px -40px rgba(0, 0, 0, 0.8);
+  }
+  .screen {
+    position: relative;
+    height: 100%;
+    border-radius: 2.1rem;
+    overflow: hidden;
+    background: var(--bg);
+    padding: 20% 8% 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7%;
+  }
+  .screen::before { content: ""; position: absolute; top: 1.8%; left: 50%; width: 32%; height: 3.4%; border-radius: 99px; background: var(--ink); transform: translateX(-50%); }
+  .sk { height: 7px; border-radius: 99px; background: rgba(20, 20, 20, 0.12); }
+  .outfit { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border-radius: 16px; background: var(--surface); }
+  .outfit .piece { position: relative; aspect-ratio: 1; border-radius: 10px; background: var(--bg); }
+  .outfit .piece.tall { grid-row: span 2; aspect-ratio: auto; }
+  .outfit svg { position: absolute; inset: 12%; width: 76%; height: 76%; }
+  .gauge { display: flex; align-items: center; gap: 8px; }
+  .gauge .bar { flex: 1; height: 6px; border-radius: 99px; background: rgba(20, 20, 20, 0.1); overflow: hidden; }
+  .gauge .bar i { display: block; width: 75%; height: 100%; background: var(--rose); }
+
+  /* 가로 레일 (옷장 룩북) */
+  .rail { margin-top: clamp(16px, 2vw, 24px); overflow: hidden; }
+  .rail-track {
+    display: flex;
+    gap: clamp(12px, 1.6vw, 20px);
+    padding: 0 var(--gutter);
+    will-change: transform;
+  }
+  .look {
+    flex: none;
+    width: clamp(240px, 31vw, 440px);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 12px;
+  }
+  .look-img { position: relative; aspect-ratio: 5 / 4; border-radius: 18px; overflow: hidden; }
+  .look-img svg { position: absolute; left: 25%; top: 10%; width: 50%; height: 80%; }
+  .look figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 16px 8px 6px; }
+  .look b { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .look span { font-family: var(--wide); font-stretch: 125%; font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+
+  @media (max-width: 959px) {
+    .hero-grid { grid-template-columns: 1fr; min-height: 0; }
+    .hero-copy, .hero-panel { grid-column: 1 / -1; }
+    .hero-bottom { grid-template-columns: 1fr; }
+    .hero-panel { height: clamp(440px, 110vw, 620px); }
+    .rail { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .rail::-webkit-scrollbar { display: none; }
+    .look { scroll-snap-align: start; scroll-margin-left: var(--gutter); width: 72vw; }
+    .rail-track { transform: none !important; }
+    .rail-track::after { content: ""; flex: none; width: 1px; }
+  }
+
+  /* ---------- 문제 공감: 옷걸이 랙 ---------- */
+  .paradox { margin-top: clamp(96px, 12vw, 160px); }
+  .rack-scroll { position: relative; height: 230vh; }
+  .rack-sticky {
+    position: sticky;
+    top: 64px;
+    min-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px 0;
+  }
+  .rack-head .h2 { margin-top: 20px; }
+  .racks { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 24px); margin-top: clamp(28px, 3.6vw, 44px); }
+  .rack {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .rack-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .rack-num {
+    font-family: var(--wide);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: clamp(64px, 8vw, 112px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .rack-num small { font-size: 0.42em; color: var(--rose); letter-spacing: 0; margin-left: 2px; }
+  .rack-top .meta { padding-top: 8px; text-align: right; font-size: 14px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .rack h3 { margin-top: 14px; font-size: clamp(18px, 1.8vw, 22px); font-weight: 700; letter-spacing: -0.02em; }
+
+  .hangers {
+    --cols: 33;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: 7px 3px;
+    margin-top: clamp(20px, 2.4vw, 28px);
+    padding-top: 12px;
+    border-top: 2px solid var(--ink);
+  }
+  .hangers i {
+    display: block;
+    height: clamp(14px, 1.5vw, 20px);
+    border-radius: 0 0 2px 2px;
+    background: rgba(20, 20, 20, 0.82);
+    transform-origin: top;
+    transition: background-color 0.35s, transform 0.35s;
+  }
+  .hangers i.unworn { background: var(--rose); transform: scaleY(0.62); }
+  .rack .src { margin-top: auto; padding-top: 22px; font-size: 12px; line-height: 1.6; color: var(--muted); }
+
+  .quote-band {
+    margin-top: clamp(16px, 2vw, 24px);
+    padding: clamp(40px, 6vw, 88px) clamp(24px, 5vw, 72px);
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--surface);
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 32px;
+    align-items: end;
+  }
+  .quote-band blockquote p { font-size: clamp(34px, 6vw, 84px); font-weight: 800; line-height: 1.08; letter-spacing: -0.06em; }
+  .quote-band .body { font-size: clamp(17px, 1.6vw, 20px); line-height: 1.7; color: rgba(255, 255, 255, 0.68); }
+  .quote-band .body b { color: var(--rose); }
+
+  @media (max-width: 959px) {
+    .rack-scroll { height: auto; }
+    .rack-sticky { position: static; min-height: 0; padding: 0; }
+    .racks { grid-template-columns: 1fr; }
+    .hangers { --cols: 22; }
+    .quote-band { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- 핵심 기능: 스크롤 인덱스 ---------- */
+  .features { margin-top: clamp(96px, 12vw, 160px); }
+  .feat-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(24px, 4vw, 64px); }
+  .feat-side { position: sticky; top: 112px; align-self: start; }
+  .feat-side .h2 { margin-top: 20px; }
+  .feat-count {
+    margin-top: 40px;
+    font-family: var(--wide);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  .feat-count b { color: var(--ink); }
+  .feat-list li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: clamp(28px, 3.4vw, 44px) 0 clamp(28px, 3.4vw, 44px) clamp(20px, 2.4vw, 32px);
+    border-top: 1px solid var(--line);
+    transition: color 0.3s;
+  }
+  .feat-list li:last-child { border-bottom: 1px solid var(--line); }
+  .feat-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    bottom: 0;
+    width: 3px;
+    background: var(--rose);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.1, 1);
+  }
+  .feat-list li.is-on::before { transform: none; }
+  .feat-list h3 {
+    font-family: var(--wide);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: clamp(28px, 3.6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    color: rgba(20, 20, 20, 0.28);
+    transition: color 0.35s;
+  }
+  .feat-list li.is-on h3 { color: var(--ink); }
+  .feat-list p { max-width: 44ch; font-size: 17px; line-height: 1.65; color: var(--muted); }
+
+  .feat-list li.decision {
+    margin-top: 24px;
+    padding: clamp(32px, 4vw, 52px);
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--surface);
+  }
+  .feat-list li.decision::before { display: none; }
+  .feat-list li.decision h3 { color: var(--surface); }
+  .feat-list li.decision h3 .spark { color: var(--rose); font-size: 0.6em; vertical-align: 0.35em; margin-left: 8px; }
+  .feat-list li.decision p { max-width: 36ch; font-size: clamp(18px, 1.8vw, 22px); color: rgba(255, 255, 255, 0.72); }
+
+  @media (max-width: 959px) {
+    .feat-grid { grid-template-columns: 1fr; }
+    .feat-side { position: static; }
+    .feat-count { display: none; }
+    .feat-list h3 { color: var(--ink); }
+    .feat-list li::before { transform: none; }
+  }
+
+  /* ---------- 요금제 ---------- */
+  .pricing { margin-top: clamp(96px, 12vw, 160px); }
+  .price-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 28px; }
+  .price-head .h2 { margin-top: 20px; }
+  .switch {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--surface);
+  }
+  .switch::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: calc(50% - 5px);
+    border-radius: 999px;
+    background: var(--ink);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.1, 1);
+  }
+  .switch[data-cycle="yearly"]::before { transform: translateX(100%); }
+  .switch button {
+    position: relative;
+    height: 44px;
+    min-width: 92px;
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .switch button[aria-pressed="true"] { color: var(--surface); }
+
+  .plans { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(16px, 2vw, 24px); margin-top: clamp(32px, 5vw, 56px); }
+  .plan { display: flex; flex-direction: column; padding: clamp(28px, 3.6vw, 52px); border-radius: var(--radius); }
+  .plan-free { background: var(--surface); }
+  .plan-plus { background: var(--ink); color: var(--surface); }
+  .plan-name { font-family: var(--wide); font-stretch: 125%; font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+  .plan-name .spark { color: var(--rose); margin-left: 6px; }
+
+  .amount {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 28px;
+    font-family: var(--wide);
+    font-stretch: 112%;
+  }
+  .odo { position: relative; display: inline-block; height: 1.05em; overflow: hidden; font-size: clamp(52px, 6.4vw, 92px); font-weight: 800; line-height: 1.05; letter-spacing: -0.05em; }
+  .odo-inner { display: flex; flex-direction: column; transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.1, 1); }
+  .odo-inner span { height: 1.05em; white-space: nowrap; }
+  .plan-plus[data-cycle="yearly"] .odo-inner { transform: translateY(-50%); }
+  .amount .unit { margin-left: 12px; font-family: var(--sans); font-size: 17px; font-weight: 500; letter-spacing: 0; color: rgba(255, 255, 255, 0.6); }
+
+  .plan-body { display: grid; gap: 32px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .plan-plus .plan-body { grid-template-columns: 1fr auto; border-top-color: rgba(255, 255, 255, 0.16); }
+  .plan ul { display: flex; flex-direction: column; gap: 12px; }
+  .plan li { display: flex; gap: 12px; font-size: 16px; line-height: 1.5; }
+  .plan li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: rgba(20, 20, 20, 0.3); }
+  .plan-plus li::before { background: var(--rose); }
+  .plan-foot { margin-top: auto; padding-top: 40px; display: flex; flex-direction: column; gap: 12px; }
+  .plan-plus .plan-foot { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .plan-foot .note { font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+
+  @media (max-width: 859px) {
+    .plans { grid-template-columns: 1fr; }
+    .plan-plus .plan-body { grid-template-columns: 1fr; }
+    .plan-foot .btn { width: 100%; }
+  }
+
+  .site-foot { margin-top: clamp(96px, 12vw, 160px); }
+  .site-foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; padding-bottom: 36px; }
+  .site-foot .big { font-family: var(--wide); font-stretch: 125%; font-weight: 900; font-size: clamp(40px, 10vw, 150px); line-height: 0.85; letter-spacing: -0.05em; }
+  .site-foot .big .spark { color: var(--rose); font-size: 0.4em; vertical-align: 0.9em; }
+  .site-foot p { font-size: 13px; color: var(--muted); }
+  .site-foot .big { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-blazer" viewBox="0 0 100 120">
+    <path d="M30 10 L42 5 L50 32 L58 5 L70 10 L88 24 L93 100 L79 102 L76 58 L75 114 L25 114 L24 58 L21 102 L7 100 L12 24 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M42 5 L39 42 L50 62 L61 42 L58 5" fill="none" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="50" cy="76" r="2.4" fill="var(--g-line)"/><circle cx="50" cy="90" r="2.4" fill="var(--g-line)"/>
+  </symbol>
+  <symbol id="g-cardigan" viewBox="0 0 100 120">
+    <path d="M34 8 Q50 16 66 8 L88 20 L94 98 L80 100 L76 50 L76 114 L24 114 L24 50 L20 100 L6 98 L12 20 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M34 8 L50 46 L66 8 M50 46 L50 114" fill="none" stroke="var(--g-line)" stroke-width="2"/>
+    <circle cx="54" cy="60" r="2.2" fill="var(--g-line)"/><circle cx="54" cy="76" r="2.2" fill="var(--g-line)"/><circle cx="54" cy="92" r="2.2" fill="var(--g-line)"/>
+  </symbol>
+  <symbol id="g-shirt" viewBox="0 0 100 120">
+    <path d="M36 8 L50 16 L64 8 L86 20 L93 72 L80 74 L76 40 L76 114 L24 114 L24 40 L20 74 L7 72 L14 20 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M36 8 L43 24 L50 16 L57 24 L64 8 M50 16 L50 114" fill="none" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="g-loafer" viewBox="0 0 120 80">
+    <path d="M8 56 Q8 36 30 33 L60 29 Q82 27 98 40 Q116 48 113 58 Q112 66 100 66 L16 66 Q8 66 8 56 Z" fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M10 60 L111 60 M50 32 Q64 46 82 34" fill="none" stroke="var(--g-line)" stroke-width="2"/>
+  </symbol>
+</svg>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="spark" aria-hidden="true">✦</span>STYLESEED</a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="#how">서비스 소개</a>
+      <a href="#features">기능</a>
+      <a href="#pricing">요금제</a>
+      <a href="#login">로그인</a>
+      <a class="nav-cta" href="#signup">무료로 시작하기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ============ 히어로 ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div>
+            <p class="label">AI PERSONAL STYLING</p>
+            <h1 id="hero-title">
+              <span>새로 사기 전에,</span>
+              <span class="em">이미 가진 옷부터.</span>
+            </h1>
+          </div>
+          <div class="hero-bottom">
+            <p>내 옷장 속 옷으로 되고 싶은 스타일을 먼저 완성하고, 정말 필요한 옷만 사게 도와드려요.</p>
+            <div class="hero-ctas">
+              <a class="btn btn-ink" href="#signup">무료로 시작하기</a>
+              <a class="btn btn-ghost" href="#video"><span class="play" aria-hidden="true">▶</span>소개 영상 보기</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <span class="panel-word" aria-hidden="true">STYLESEED</span>
+          <div class="panel-phone" data-speed="-0.08">
+            <div class="phone" role="img" aria-label="STYLESEED 앱에서 내 옷으로 만든 코디 추천 화면">
+              <div class="screen" aria-hidden="true">
+                <div class="sk" style="width:36%"></div>
+                <div class="sk" style="width:70%;height:12px;background:rgba(20,20,20,.22);margin-top:-4%"></div>
+                <div class="outfit">
+                  <div class="piece tall"><svg style="--g-fill:var(--burgundy);--g-line:var(--ink)"><use href="#g-blazer"/></svg></div>
+                  <div class="piece"><svg style="--g-fill:#fff;--g-line:var(--ink)"><use href="#g-shirt"/></svg></div>
+                  <div class="piece"><svg style="--g-fill:var(--ink);--g-line:var(--ink)"><use href="#g-loafer"/></svg></div>
+                </div>
+                <div class="gauge"><div class="bar"><i></i></div></div>
+                <div class="sk" style="width:58%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-tag t1" data-speed="0.12" aria-hidden="true"><i class="dot" style="background:var(--burgundy)"></i><b>울 블레이저</b><span>Burgundy · Wool</span></div>
+          <div class="panel-tag t2" data-speed="0.24" aria-hidden="true"><i class="dot" style="background:var(--olive)"></i><b>니트 가디건</b><span>Olive · Knit</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail" id="rail">
+      <div class="rail-track" id="rail-track">
+        <figure class="look">
+          <div class="look-img" style="background:#e7dcd9" role="img" aria-label="버건디 울 블레이저"><svg style="--g-fill:var(--burgundy);--g-line:var(--ink)"><use href="#g-blazer"/></svg></div>
+          <figcaption><b>울 블레이저</b><span>Burgundy · Wool</span></figcaption>
+        </figure>
+        <figure class="look">
+          <div class="look-img" style="background:#e3e2d3" role="img" aria-label="올리브 니트 가디건"><svg style="--g-fill:var(--olive);--g-line:var(--ink)"><use href="#g-cardigan"/></svg></div>
+          <figcaption><b>니트 가디건</b><span>Olive · Knit</span></figcaption>
+        </figure>
+        <figure class="look">
+          <div class="look-img" style="background:var(--bg)" role="img" aria-label="화이트 코튼 셔츠"><svg style="--g-fill:#fff;--g-line:var(--ink)"><use href="#g-shirt"/></svg></div>
+          <figcaption><b>코튼 셔츠</b><span>White · Cotton</span></figcaption>
+        </figure>
+        <figure class="look">
+          <div class="look-img" style="background:#dcdad3" role="img" aria-label="블랙 레더 로퍼"><svg style="--g-fill:var(--ink);--g-line:var(--ink);left:15%;width:70%"><use href="#g-loafer"/></svg></div>
+          <figcaption><b>레더 로퍼</b><span>Black · Leather</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 문제 공감 · 옷걸이 랙 ============ -->
+  <section class="paradox" id="paradox" aria-labelledby="paradox-title">
+    <div class="rack-scroll" id="rack-scroll">
+      <div class="rack-sticky">
+        <div class="wrap">
+          <div class="rack-head">
+            <div>
+              <p class="label">STYLESEED · CLOSET PARADOX</p>
+              <h2 class="h2" id="paradox-title">
+                <span>옷장은 가득 찼는데,</span>
+                <span><span class="em">입지 않는 옷</span>이 쌓여요</span>
+              </h2>
+            </div>
+          </div>
+
+          <div class="racks">
+            <article class="rack">
+              <div class="rack-top">
+                <p class="rack-num"><span data-count="22">22</span><small>%</small></p>
+                <p class="meta">평균 198벌 보유</p>
+              </div>
+              <h3>1년간 한 번도 입지 않은 옷</h3>
+              <div class="hangers" data-total="198" data-rate="0.22" role="img" aria-label="옷 198벌 중 22%를 1년간 입지 않았다는 것을 옷걸이로 표현한 그림"></div>
+              <p class="src">벨기에 플랑드르 성인 156명 옷장 조사, 2024</p>
+            </article>
+            <article class="rack">
+              <div class="rack-top">
+                <p class="rack-num"><span data-count="26">26</span><small>%</small></p>
+                <p class="meta">평균 118벌 보유</p>
+              </div>
+              <h3>최근 1년간 입지 않은 옷</h3>
+              <div class="hangers" data-total="118" data-rate="0.26" role="img" aria-label="옷 118벌 중 26%를 최근 1년간 입지 않았다는 것을 옷걸이로 표현한 그림"></div>
+              <p class="src">영국 WRAP 조사</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="quote-band">
+        <blockquote><p>“앞으로 입을 것 같아서”</p></blockquote>
+        <p class="body">버리지 못하는 이유예요. 입을 의지는 있지만, <b>언제·어떻게 입을지</b> 연결되지 않았을 뿐이에요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 핵심 기능 ============ -->
+  <section class="features" id="features" aria-labelledby="features-title">
+    <div class="wrap feat-grid">
+      <div class="feat-side">
+        <p class="label">STYLESEED · FEATURES</p>
+        <h2 class="h2" id="features-title">
+          <span>매일 옷장을 여는</span>
+          <span class="em">새로운 방법</span>
+        </h2>
+        <p class="feat-count" aria-hidden="true"><b id="feat-now">1</b> / 5</p>
+      </div>
+      <ul class="feat-list" id="feat-list">
+        <li>
+          <h3>Digital Closet</h3>
+          <p>내 옷을 한눈에. 소수의 옷만 등록해도 첫 코디를 바로 받아요.</p>
+        </li>
+        <li>
+          <h3>Core 코디</h3>
+          <p>되고 싶은 스타일을 고르면 내 옷으로 그 무드를 완성해요.</p>
+        </li>
+        <li>
+          <h3>오늘의 코디</h3>
+          <p>오늘 날씨에 맞춰 지금 바로 입을 수 있는 코디를 알려줘요.</p>
+        </li>
+        <li>
+          <h3>Missing Item</h3>
+          <p>원하는 스타일에 정말 부족한 아이템만 알려줘요.</p>
+        </li>
+        <li class="decision">
+          <h3>살까 말까 판단<span class="spark" aria-hidden="true">✦</span></h3>
+          <p>“내 옷 42벌 중 15벌과 조합 가능, 새 코디 12개, 비슷한 옷 1개 보유”처럼 사기 전에 확인해요.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 요금제 ============ -->
+  <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+    <div class="wrap">
+      <div class="price-head">
+        <div>
+          <p class="label">STYLESEED · PRICING</p>
+          <h2 class="h2" id="pricing-title">
+            <span>옷장 저장이 아니라,</span>
+            <span class="em">더 나은 코디와 구매 판단에</span>
+          </h2>
+        </div>
+        <div class="switch" id="switch" data-cycle="monthly" role="group" aria-label="PLUS 결제 주기">
+          <button type="button" data-cycle="monthly" aria-pressed="true">월간</button>
+          <button type="button" data-cycle="yearly" aria-pressed="false">연간</button>
+        </div>
+      </div>
+
+      <div class="plans">
+        <article class="plan plan-free">
+          <h3 class="plan-name">Free</h3>
+          <p class="amount"><span class="odo"><span class="odo-inner"><span>0원</span></span></span></p>
+          <div class="plan-body">
+            <ul>
+              <li>옷 등록 · AI 분석</li>
+              <li>Digital Closet</li>
+              <li>보유 의류 기반 기본 코디</li>
+              <li>Missing Item 탐지</li>
+            </ul>
+          </div>
+          <div class="plan-foot">
+            <a class="btn btn-line" href="#signup">무료로 시작하기</a>
+          </div>
+        </article>
+
+        <article class="plan plan-plus" id="plan-plus" data-cycle="monthly">
+          <h3 class="plan-name">PLUS<span class="spark" aria-hidden="true">✦</span></h3>
+          <p class="amount">
+            <span class="odo" aria-hidden="true"><span class="odo-inner"><span>5,900원<span class="unit">/ 월</span></span><span>59,000원<span class="unit">/ 년</span></span></span></span>
+            <span class="sr" id="plus-sr" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">5,900원 / 월</span>
+          </p>
+          <div class="plan-body">
+            <ul>
+              <li>Free의 모든 기능</li>
+              <li>내 취향을 학습하는 개인화 추천</li>
+              <li>살까 말까 판단 (Wardrobe Decision)</li>
+              <li>Ideal Style 분석</li>
+              <li>트렌드 코디</li>
+            </ul>
+          </div>
+          <div class="plan-foot">
+            <a class="btn btn-rose" href="#signup">PLUS 시작하기</a>
+            <p class="note">초기 가격이며 변경될 수 있어요</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="big" aria-label="STYLESEED">STYLESEED<span class="spark" aria-hidden="true">✦</span></p>
+    <p>AI PERSONAL STYLING<br />© 2026 STYLESEED</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var desktop = window.matchMedia("(min-width: 960px)");
+    var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+
+    // 옷걸이 만들기: 입지 않은 옷은 흩어진 순서로 하나씩 켜져요 (고정 시드)
+    var racks = Array.prototype.map.call(document.querySelectorAll(".hangers"), function (el) {
+      var total = +el.dataset.total, unworn = Math.round(total * +el.dataset.rate);
+      var frag = document.createDocumentFragment(), bars = [];
+      for (var i = 0; i < total; i++) { var b = document.createElement("i"); bars.push(b); frag.appendChild(b); }
+      el.appendChild(frag);
+      var seed = total, order = bars.map(function (_, i) { return i; });
+      for (var j = order.length - 1; j > 0; j--) {
+        seed = (seed * 9301 + 49297) % 233280;
+        var k = Math.floor((seed / 233280) * (j + 1)), t = order[j]; order[j] = order[k]; order[k] = t;
+      }
+      var num = el.closest(".rack").querySelector("[data-count]");
+      return { bars: bars, pick: order.slice(0, unworn), num: num, target: +num.dataset.count, lit: -1 };
+    });
+
+    function paintRacks(p) {
+      racks.forEach(function (r) {
+        var n = Math.round(r.pick.length * p);
+        if (n === r.lit) return;
+        r.pick.forEach(function (idx, i) { r.bars[idx].classList.toggle("unworn", i < n); });
+        r.num.textContent = Math.round(r.target * p);
+        r.lit = n;
+      });
+    }
+
+    var railTrack = document.getElementById("rail-track");
+    var rail = document.getElementById("rail");
+    var rackScroll = document.getElementById("rack-scroll");
+    var parallax = document.querySelectorAll("[data-speed]");
+    var feats = document.querySelectorAll("#feat-list li");
+    var featNow = document.getElementById("feat-now");
+
+    if (reduce) {
+      paintRacks(1);
+      feats.forEach(function (li) { li.classList.add("is-on"); });
+      return;
+    }
+
+    var ticking = false;
+    function frame() {
+      ticking = false;
+      var vh = window.innerHeight, y = window.scrollY;
+
+      // 1. 히어로 패널: 폰과 태그가 서로 다른 속도로
+      if (y < vh * 1.2) {
+        parallax.forEach(function (el) { el.style.transform = "translate3d(0," + (y * +el.dataset.speed).toFixed(1) + "px,0)"; });
+      }
+
+      // 2. 가로 레일: 세로 스크롤만큼 옆으로 이동 (데스크톱)
+      if (desktop.matches) {
+        var rr = rail.getBoundingClientRect();
+        var overflow = railTrack.scrollWidth - rail.clientWidth;
+        var pr = clamp((vh - rr.top) / (vh + rr.height), 0, 1);
+        railTrack.style.transform = "translate3d(" + (-overflow * pr).toFixed(1) + "px,0,0)";
+      }
+
+      // 3. 옷걸이 랙: 스크롤 진행만큼 입지 않은 옷이 켜져요
+      var rs = rackScroll.getBoundingClientRect();
+      var pRack = desktop.matches
+        ? clamp(-rs.top / (rs.height - vh) * 1.25, 0, 1)
+        : clamp((vh * 0.9 - rs.top) / (rs.height * 0.7), 0, 1);
+      paintRacks(pRack);
+
+      // 4. 기능 목록: 화면 가운데를 지난 항목까지 켜져요
+      var active = 0;
+      feats.forEach(function (li, i) {
+        var on = li.getBoundingClientRect().top < vh * 0.58;
+        li.classList.toggle("is-on", on);
+        if (on) active = i;
+      });
+      featNow.textContent = active + 1;
+    }
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
+    window.addEventListener("resize", frame);
+    frame();
+  })();
+
+  // 요금제 월간/연간 전환
+  (function () {
+    var sw = document.getElementById("switch"), plus = document.getElementById("plan-plus");
+    var sr = document.getElementById("plus-sr");
+    var text = { monthly: ["5,900원", "월"], yearly: ["59,000원", "년"] };
+    sw.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var c = btn.dataset.cycle;
+        sw.dataset.cycle = c; plus.dataset.cycle = c;
+        sw.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+        sr.textContent = text[c][0] + " / " + text[c][1];
+      });
+    });
+  })();
+</script>
+</body>
+</html>
